@@ -1,10 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
 const userRoute = require('./routes/users');
 const authorRoute = require('./routes/author');
+const postRoute = require('./routes/posts');
 const db = require('./config/db');
 
 // Connect to db
@@ -21,6 +21,7 @@ app.use(morgan('common'));
 // Routes init
 app.use('/api/users', userRoute);
 app.use('/api/author', authorRoute);
+app.use('/api/posts', postRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello world');

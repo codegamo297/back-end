@@ -9,7 +9,8 @@ router.delete('/:id', UserController.delete);
 // Get user
 router.get('/:id', UserController.get);
 // Following a user
-
+router.put('/:id/follow', UserController.follow);
 // UnFollowing a user
+router.put('/:id/unfollow', UserController.unFollow);
 
 module.exports = router;
