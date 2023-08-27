@@ -14,6 +14,7 @@ const AuthorController = {
                 userName: req.body.userName,
                 email: req.body.email,
                 password: hashedPassword,
+                profilePicture: req.body.profilePicture,
             });
 
             // Save user and respond
