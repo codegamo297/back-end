@@ -73,6 +73,15 @@ const PostController = {
             return res.status(500).json(error);
         }
     },
+    getUserAllPosts: async (req, res) => {
+        try {
+            const user = await User.findOne({ userName: req.params.userName });
+            const posts = await Post.find({ userId: user._id });
+            res.status(200).json(posts);
+        } catch (error) {
+            return res.status(500).json(error);
+        }
+    },
 };
 
 module.exports = PostController;

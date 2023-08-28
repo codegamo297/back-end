@@ -38,8 +38,12 @@ const UserController = {
         }
     },
     get: async (req, res) => {
+        const userId = req.query.userId;
+        const userName = req.query.userName;
         try {
-            const user = await User.findById(req.params.id);
+            const user = userId
+                ? await User.findById(userId)
+                : await User.findOne({ userName: userName });
             const { password, updatedAt, ...other } = user._doc;
 
             user ? res.status(200).json(other) : res.status(404).send('User not found');
