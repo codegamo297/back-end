@@ -8,6 +8,8 @@ router.put('/:id', UserController.update);
 router.delete('/:id', UserController.delete);
 // Get user
 router.get('/', UserController.get);
+// Get friends
+router.get('/friends/:userId', UserController.getFriends);
 // Following a user
 router.put('/:id/follow', UserController.follow);
 // UnFollowing a user

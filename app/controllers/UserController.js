@@ -51,6 +51,38 @@ const UserController = {
             return res.status(500).json(error);
         }
     },
+    getFriends: async (req, res) => {
+        try {
+            const user = await User.findById(req.params.userId);
+            const userFollowings = await Promise.all(
+                user.followings.map((followingId) => {
+                    const isFollower = user.followers.some(
+                        (followerId) => followerId === followingId,
+                    );
+                    if (isFollower) {
+                        return followingId;
+                    }
+                }),
+            );
+            const filteredUserFollowings = userFollowings.filter(
+                (followingId) => followingId !== undefined,
+            );
+
+            const friends = await Promise.all(
+                filteredUserFollowings.map((friendId) => {
+                    return User.findById(friendId);
+                }),
+            );
+            let friendList = [];
+            friends.map((friend) => {
+                const { _id, userName, profilePicture } = friend;
+                friendList.push({ _id, userName, profilePicture });
+            });
+            res.status(200).json(friendList);
+        } catch (error) {
+            return res.status(500).json(error);
+        }
+    },
     follow: async (req, res) => {
         if (req.body.userId !== req.params.id) {
             try {
