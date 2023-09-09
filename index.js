@@ -1,13 +1,15 @@
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const multer = require('multer');
+const path = require('path');
 
 const userRoute = require('./routes/users');
 const authorRoute = require('./routes/author');
 const postRoute = require('./routes/posts');
+const conversationRoute = require('./routes/conversations');
+const messageRoute = require('./routes/messages');
 const db = require('./config/db');
-const multer = require('multer');
-const path = require('path');
 
 // Connect to db
 db.connect();
@@ -15,6 +17,7 @@ db.connect();
 const app = express();
 const port = 8800;
 
+// Create relative path: public/images
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 // middleware
@@ -22,6 +25,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));
 
+// Upload file
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/images');
@@ -43,10 +47,8 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
 app.use('/api/users', userRoute);
 app.use('/api/author', authorRoute);
 app.use('/api/posts', postRoute);
-
-app.get('/', (req, res) => {
-    res.send('Hello world');
-});
+app.use('/api/conversations', conversationRoute);
+app.use('/api/messages', messageRoute);
 
 // Listening port
 app.listen(port, () => {
